@@ -93,7 +93,7 @@ const FolderListLayout = ({
 
       {folderChildren.map((c: OdFolderChildren) => (
         <div
-          className="grid grid-cols-12 transition-all duration-100 hover:bg-gray-100 dark:hover:bg-gray-850"
+        className={`grid grid-cols-12 transition-all duration-100 hover:bg-gray-100 dark:hover:bg-gray-850 ${!c.folder && c.name === '.password' ? 'hidden': ''}`}
           key={c.id}
         >
           <Link href={`${path === '/' ? '' : path}/${encodeURIComponent(c.name)}`} passHref>

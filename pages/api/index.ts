@@ -93,6 +93,16 @@ export function getAuthTokenPath(path: string) {
   return authTokenPath
 }
 
+export function checkHiddenRoute(path: string) {
+  const hiddenRoutes = siteConfig.hiddenRoutes
+  for (const r of hiddenRoutes) {
+    if (path.startsWith(r)) {
+      return { code: 404, message: 'Not Found.' }
+    }
+  }
+  return { code: 200, message: '' }
+}
+
 /**
  * Handles protected route authentication:
  * - Match the cleanPath against an array of user defined protected routes
@@ -186,6 +196,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return
   }
   const cleanPath = pathPosix.resolve('/', pathPosix.normalize(path))
+
+  const { code: checkHiddenCode, message: checkHiddenMessage } = checkHiddenRoute(cleanPath)
+
+  if (checkHiddenCode !== 200) {
+    res.status(checkHiddenCode).json({ error: checkHiddenMessage })
+    return
+  }
+
+  if (checkHiddenMessage !== '') {
+    res.setHeader('Cache-Control', 'no-cache')
+  }
 
   const accessToken = await getAccessToken()
 

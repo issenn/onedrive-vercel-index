@@ -156,6 +156,19 @@ export async function checkAuthRoute(
   return { code: 200, message: 'Authenticated.' }
 }
 
+export function checkHiddenRoute(path: string): boolean {
+  path = path.toLowerCase() + '/'
+  const hiddenRoutes = siteConfig.hiddenRoutes as string[]
+  for (let r of hiddenRoutes) {
+    if (typeof r !== 'string') continue
+    r = r.toLowerCase().replace(/\/$/, '') + '/'
+    if (path.startsWith(r)) {
+      return true
+    }
+  }
+  return false
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // If method is POST, then the API is called by the client to store acquired tokens
   if (req.method === 'POST') {
@@ -270,7 +283,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
 
-      folderData.value = folderData.value.filter(c => !(c.file && c.name === '.password'))
+      folderData.value = folderData.value.filter(c => !(c.file && c.name === '.password') && !checkHiddenRoute(cleanPath + '/' + c.name))
 
       // Extract next page token from full @odata.nextLink
       const nextPage = folderData['@odata.nextLink']

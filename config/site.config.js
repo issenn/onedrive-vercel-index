@@ -48,6 +48,8 @@ module.exports = {
   // protectedRoutes: ['/🌞 Private folder/u-need-a-password', '/🥟 Some test files/Protected route'],
   protectedRoutes: process.env.NEXT_PUBLIC_PROTECTED_ROUTES?.split(';') || ['/🌞 Private folder/u-need-a-password', '/🥟 Some test files/Protected route'],
 
+  hiddenRoutes: process.env.NEXT_PUBLIC_HIDDEN_ROUTES?.split(';') || [],
+
   // [OPTIONAL] Use "" here if you want to remove this email address from the nav bar.
   // email: 'mailto:spencer.wushangbo@gmail.com',
   email: `mailto:${process.env.NEXT_PUBLIC_EMAIL ?? 'spencer.wushangbo@gmail.com'}`,

@@ -270,6 +270,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
 
+      folderData.value = folderData.value.filter(c => !(c.file && c.name === '.password'))
+
       // Extract next page token from full @odata.nextLink
       const nextPage = folderData['@odata.nextLink']
         ? folderData['@odata.nextLink'].match(/&\$skiptoken=(.+)/i)[1]
